@@ -48,7 +48,7 @@ sub get {
         $cache_file->remove;
         return undef;
     }
-    Data::MessagePack->unpack($cache_file->slurp);
+    Data::MessagePack->unpack(scalar $cache_file->slurp);
 }
 
 sub set {

@@ -1,11 +1,11 @@
 {
-   "background_page": "background.html",
+   "background_page": "pub_html/background.html",
    "chrome_url_overrides": {
-      "newtab": "browse.html"
+      "newtab": "pub_html/browse.html"
    },
    "description": "A start page for Hatena-Bookmark users.",
    "name": "StartFromHatebu",
-   "options_page": "options.html",
+   "options_page": "pub_html/options.html",
    "permissions": [ 
      "chrome://favicon/",
      "tabs",

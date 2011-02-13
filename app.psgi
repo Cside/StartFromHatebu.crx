@@ -85,7 +85,7 @@ sub render {
             },
         },
     );
-    my $template = decode_utf8(file('template/index.html')->slurp);
+    my $template = decode_utf8(scalar file('template/index.html')->slurp);
     my $result = $tx->render_string(
         $template,
         { @_ },
