@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>My Bookmarks</title>
+  <script src="./jquery.min.js"></script>
+
+<script>
+$(function() {
+    var base      = localStorage["psgi_url"] || 'http://localhost:5000/';
+    var wrapper   = $('#wrapper');
+    var form      = $('#search-form');
+    var lastQ     = '';
+
+    setLoadingImg();
+
+    sendRequest(base, function(res) {
+        wrapper.html(res);
+        onLoad();
+    }, function(res) {
+        wrapper.html(res);
+    });
+
+    form.keyup(function() {
+        var q = getQ();
+        setTimeout(function(){
+            if (q !== lastQ && q === getQ()) search();
+        }, 500);
+    });
+
+    $('.sort').click(function(){
+        if (! $(this).hasClass('selected')) {
+            $('.sort').filter('.selected').removeClass('selected');
+            $(this).addClass('selected');
+            search();
+        }
+    });
+
+    function search(limit) {
+        var q = $('#search-form').val();
+        if (q) {
+            c(q)
+            setLoadingImg();
+            lastQ       = q;
+            var sort    = getSort();
+            limit       = limit || 20;
+            var req_url = base + 'search?q=' + encodeURIComponent(q) + '&sort=' + sort + '&limit=' + limit;
+            sendRequest(req_url, function(res) {
+                wrapper.html(res);
+                onLoad();
+            }, function(res) {
+                wrapper.html(res);
+                c(res);
+            });
+        }
+    }
+    function getQ() {
+        return form.val();
+    }
+    function getSort() {
+        return $('.selected').text();
+    }
+    function setLoadingImg() {
+        wrapper.html('<img src="image/loading.gif" alt="loading"/>');
+    }
+    function removeLoadingImg() {
+        wrapper.html('');
+    }
+    function sendRequest(url, onSuccess, onFail) {
+        chrome.extension.sendRequest(url, function (res) {
+            if (res) {
+                onSuccess(res);
+            } else {
+                console.log(res);
+                onFail(res);
+            }
+        });
+    }
+    function onLoad(){
+        $('.delete').click(function() {
+            var entry = $(this).parent();
+            if (confirm("本当に削除しますか？")) {
+                var eid = entry.attr('eid');
+                var req_url = base + 'delete?eid=' + eid;
+                sendRequest(base, function(req) {
+                    entry.hide('fast');
+                }, function() {
+                    alert('Request failed.');
+                });
+            }
+
+        });
+
+        $('.entry').hover(function() {
+            $(this).find('.title').addClass('h-title');
+        }, function() {
+            $(this).find('.title').removeClass('h-title');
+        });
+        $('.delete').hover(function() {
+            $(this).addClass('h-delete');
+        }, function() {
+            $(this).removeClass('h-delete');
+        });
+
+        $('.title').click(function() {
+            var self = this;
+            chrome.tabs.getSelected(undefined, function(tab) {
+                var a = $(self).find('a');
+                if (a) {
+                    chrome.tabs.create({
+                        url: a.attr('href'),
+                        index: tab.index + 1
+                    });
+                } else {
+                    return false;
+                }
+            });
+            return false;
+        });
+
+        $('.more').click(function() {
+            search(100);
+        });
+    }
+});
+
+function c (s) {console.log(s);}
+function a (s) {alert(s);}
+</script>
+</head>
+<body>
+  <div id="head-bar">
+    <div id="header">
+      <input type="text" id="search-form"/>
+      <span class="sort selected">date</span>
+      <span class="sort">scores</span>
+      <span class="sort">users</span>
+    </div>
+  </div>
+  <div id="wrapper"></div>
+</body>
+</html>
+
+<style type="text/css">
+body {
+    margin: 0px;
+    padding: 0px;
+    font-size: 80%;
+    background-color: #F9F9F9;
+}
+#head-bar {
+    margin: 0px;
+    background-color: #2C6EBD;
+    padding: 5px;
+    border-bottom: 1px solid #16375E;
+}
+#search-form {
+    width: 125px;
+    margin: 0px 5px;
+}
+#header {
+    margin:0 auto;
+    width: 400px;
+}
+#wrapper {
+    margin:0 auto;
+    width: 810px;
+    margin-top: 10px;
+}
+#content {
+    width: 700px;
+    margin: 0px;
+    float: right;
+}
+#sidebar {
+    width: 100px;
+    margin: 0px;
+    float: left;
+}
+.sort {
+    padding: 2px;
+    margin: 0px;
+    padding: 3px;
+    background-color: #EFEFEF;
+}
+.selected {
+    background-color: #87B211;
+    color: white;
+}
+li {
+    list-style: none;
+}
+.h-title {
+    background-color: #fafad2;
+    border : solid 1px #ffed4c !important;
+}
+.h-delete {
+    background-color: #fafad2;
+    border : solid 1px #ffed4c !important;
+}
+td {
+    padding: 0px 3px;
+}
+td.favicon {
+    width:16px;
+    height:16px;
+}
+td.hatebu {
+    width: 65px;
+    text-align: right;
+}
+td.date {
+    font-size: 80%;
+    color: gray;
+    text-align: right;
+}
+td.delete {
+    color: gray;
+    cursor: pointer;
+    border: solid 1px #transparent;
+}
+td.title {
+    cursor: pointer;
+    border: solid 1px #transparent;
+}
+img {
+    margin: 0px;
+    padding: 0px;
+}
+img.favicon {
+    width: 16px;
+    height: 16px;
+}
+.title a{
+    text-decoration: none;
+}
+h4 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+</style>
+

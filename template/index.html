@@ -1,0 +1,72 @@
+<div id="content">
+  <table>
+
+    [% IF components.size() %]
+      [% FOR item IN components %]
+        <tr class="entry" eid="[% item.eid %]">
+          <td class="favicon">
+            <img class="favicon "src="http://favicon.st-hatena.com/?url=[% item.link | uri %]"/>
+          </td>
+          <td class="title">
+            <a href="[% item.link %]" target="_blank">[% truncates(item.title) %]</a>
+          </td>
+          <td class="hatebu">
+            <img src="http://b.hatena.ne.jp/entry/image/[% item.link %]"/>
+          </td>
+          <td class="date">[% item.date %]</td>
+          <td class="delete"> × </td>
+        </tr>
+      [% END %]
+      <!--
+      [% IF components.size() == 20 && q %]
+        <tr class="entry" eid="[% item.eid %]">
+          <td></td>
+          <td colspan="4">
+            <a href="" class="more">More...</a>
+          </td>
+        </tr>
+      [% END %]
+      -->
+    [% ELSE %]
+      <tr>
+        <td>検索結果はありませんでした。</td>
+      </tr>
+    [% END %]
+  </table>
+</div>
+
+<div id="sidebar">
+  [% IF q %]
+    <h4>Instead:</h4>
+    [% SET q = uri_escape(q) %]
+    [% SET others = [
+        {
+            title   => "Hatena",
+            link    => "http://b.hatena.ne.jp/search?q=" _ q,
+            favicon => "image/bookmark.ico"
+        }, {
+            title   => "Google",
+            link    => "http://www.google.co.jp/search?q=" _ q,
+            favicon => "image/google.png"
+        }, {
+            title   => "History",
+            link    => "chrome://history/#q=" _ q,
+            favicon => "image/history.png"
+        }
+    ] %]
+    <table>
+      [% FOR item IN others %]
+        <tr>
+          <td class="favicon">
+            <img src="[% item.favicon %]" height="16px" width="16px"/>
+          </td>
+          <td class="title">
+            <a href="[% item.link %]" target="_blank">[% item.title %]</a>
+          </td>
+        </tr>
+      [% END %]
+    </table>
+  [% ELSE %]
+    <h4>Bookmarks:</h4>
+  [% END %]
+</div>

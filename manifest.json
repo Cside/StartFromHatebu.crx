@@ -1,0 +1,17 @@
+{
+   "background_page": "background.html",
+   "chrome_url_overrides": {
+      "newtab": "browse.html"
+   },
+   "description": "A start page for Hatena-Bookmark users.",
+   "name": "My Bookmarks",
+   "options_page": "options.html",
+   "permissions": [ 
+     "chrome://favicon/",
+     "tabs",
+     "http://*/*"
+   ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "0.1"
+}
+
