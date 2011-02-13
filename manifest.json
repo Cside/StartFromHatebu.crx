@@ -4,7 +4,7 @@
       "newtab": "browse.html"
    },
    "description": "A start page for Hatena-Bookmark users.",
-   "name": "My Bookmarks",
+   "name": "StartFromHatebu",
    "options_page": "options.html",
    "permissions": [ 
      "chrome://favicon/",
