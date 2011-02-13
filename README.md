@@ -7,19 +7,18 @@ Chromeのスタートページをはてなブックマークのマイブック�
 
 How to Use
 ----------
- * ソースファイルをDLして、
 
-    tar zxvg StartFromHatebu
-    cd StartFromHatebu/
+    git clone git://github.com/Cside/StartFromHatebu.crx.git
+    cd StartFromHatebu.crx/
     cpanm Module::Install Module::Install::AuthorTests
     cpanm --installdeps .
     perl -MConfig::Pit -e'Config::Pit::set("hatena.ne.jp", data=>{ username => "username on Hatena", password => "password" })'
     plackup -p 5000 app.psgi
 
- * これで使えるようになります。
- * ポートは5000番である必要はありません。
-   * ただし5000番以外のポートを使う際はオプションページからURLの変更を行って臭さ居。
-     * オプションページは chrome://extensions/ にアクセスして探すと見つかります。
+これで使えるようになります。
+ポートは5000番である必要はありません。
+ただし5000番以外のポートを使う際はオプションページからURLの変更を行ってください。
+オプションページは chrome://extensions/ にアクセスして探すと見つかります。
 
 TODO
 ----
