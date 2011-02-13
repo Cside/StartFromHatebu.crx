@@ -7,7 +7,6 @@ all_from 'lib/MyBookmark.pm';
 requires "Config::Pit";
 requires "Path::Class";
 requires "Perl6::Say";
-requires "MyBookmark";
 requires "Plack::Request";
 requires "Text::Xslate";
 requires "Class::Accessor::Lite";
