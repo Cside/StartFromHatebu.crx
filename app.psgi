@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 use lib 'lib';
-use Data::Dumper;
-sub p {warn Dumper shift;}
 use utf8;
 use Encode;
 use Config::Pit;
@@ -15,10 +13,6 @@ use MyBookmark;
 use Plack::Request;
 
 use Text::Xslate;
-# フィードのパース
-# config::pit（これもOauthにすりゃええやん…）;
-# キャッシュ（これも以下略。ローカルストレージとか？）
-# リクエスト（jQueryでおk）
 
 my $config = pit_get(
     'hatena.ne.jp',
@@ -91,9 +85,7 @@ sub render {
             },
         },
     );
-
     my $template = decode_utf8(file('template/index.html')->slurp);
-
     my $result = $tx->render_string(
         $template,
         { @_ },
