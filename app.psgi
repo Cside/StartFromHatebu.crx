@@ -83,6 +83,12 @@ sub render {
                 }
                 encode_utf8 $str;
             },
+            bookmark_page => sub {
+                my $url = decode_utf8(shift);
+                encode_utf8(
+                    "http://b.hatena.ne.jp/entry/" . ($url =~ /https?:\/\/(.+)/ ? $1 : $url)
+                );
+            },
         },
     );
     my $template = decode_utf8(scalar file('template/index.html')->slurp);

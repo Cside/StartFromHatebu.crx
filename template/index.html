@@ -11,7 +11,9 @@
             <a href="[% item.link %]" target="_blank">[% truncates(item.title) %]</a>
           </td>
           <td class="hatebu">
-            <img src="http://b.hatena.ne.jp/entry/image/[% item.link %]"/>
+            <a href="[% bookmark_page(item.link) %]" target="_blank">
+              <img src="http://b.hatena.ne.jp/entry/image/[% item.link %]"/>
+            </a>
           </td>
           <td class="date">[% item.date %]</td>
           <td class="delete"> × </td>
