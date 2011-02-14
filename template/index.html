@@ -37,19 +37,18 @@
 <div id="sidebar">
   [% IF q %]
     <h4>Instead:</h4>
-    [% SET q = uri_escape(q) %]
     [% SET others = [
         {
             title   => "Hatena",
-            link    => "http://b.hatena.ne.jp/search?q=" _ q,
+            link    => "http://b.hatena.ne.jp/search?q=" _ uri(q),
             favicon => "../static/image/bookmark.ico"
         }, {
             title   => "Google",
-            link    => "http://www.google.co.jp/search?q=" _ q,
+            link    => "http://www.google.co.jp/search?q=" _ uri(q),
             favicon => "../static/image/google.png"
         }, {
             title   => "History",
-            link    => "chrome://history/#q=" _ q,
+            link    => "chrome://history/#q=" _ uri(q),
             favicon => "../static/image/history.png"
         }
     ] %]

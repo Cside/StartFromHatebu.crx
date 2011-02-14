@@ -34,18 +34,19 @@ my $tx = Text::Xslate->new(
     function => {
         truncates => sub {
             my ($str, $size, $suffix) = @_;
-            $str = decode_utf8($str);
-            $str    = ''    unless $str;
-            $size   = 64    unless $size;
-            $suffix = "..." unless $suffix;
+            $str    = decode_utf8($str || '');
+            $size   ||= 64;
+            $suffix ||= "...";
             my $b = 0;
             for (my $i = 0; $i < length $str; $i++) {
                 $b += length(encode_utf8 substr($str, $i, 1)) == 1 ? 1 : 2;
-                if ($b > $size) {
-                    return substr($str, 0, $i) . $suffix;
-                }
+                return substr($str, 0, $i) . $suffix if $b > $size;
             }
-            return $str;
+            $str;
+        },
+        bookmark_page => sub {
+            my $url = decode_utf8(shift);
+            "http://b.hatena.ne.jp/entry/" . ($url =~ /https?:\/\/(.+)/ ? $1 : $url);
         },
     },
     path => ['template'],
@@ -59,7 +60,8 @@ my $app = sub {
 
     if ($req->path eq '/') {
         $result = $my_bookmark->list;
-    } elsif ($req->path eq '/search') {
+    }
+    elsif ($req->path eq '/search') {
         $q        = $req->param('q');
         my $sort  = $req->param('sort');
         my $limit = $req->param('limit');
@@ -68,17 +70,21 @@ my $app = sub {
                 sort  => $sort,
                 limit => $limit,
         );
-    } elsif ($req->path eq '/delete') {
+    }
+    elsif ($req->path eq '/delete') {
         $result = $my_bookmark->delete($req->param('eid'));
         return (defined $result)
-            ? [ 200, ["text/html; charset=utf-8"], ["success"]]
-            : [ 404, [], []];
+            ? [ 200, ["text/html; charset=utf-8"], ["success"] ]
+            : [ 404, [], [] ];
     }
+
     my $res = $req->new_response($result ? 200 : 404);
     $res->content_type('text/html; charset=utf-8');
-    $res->body(encode_utf8($tx->render('index.html', {
-        components => $result ne 'empty' ? $result : [],
-        q => $q
-    })));
+    $res->body(encode_utf8(
+        $tx->render('index.html', {
+            components => $result ne 'empty' ? $result : [],
+            q          => $q
+        })
+    ));
     $res->finalize;
 };
