@@ -81,9 +81,10 @@ $(function() {
             if (confirm("本当に削除しますか？")) {
                 var eid = entry.attr('eid');
                 var req_url = base + 'delete?eid=' + eid;
-                sendRequest(base, function(req) {
+                sendRequest(req_url, function(req) {
                     entry.hide('fast');
-                }, function() {
+                }, function(req) {
+                    c(req);
                     alert('Request failed.');
                 });
             }
@@ -119,6 +120,7 @@ $(function() {
 
         $('.more').click(function() {
             search(100);
+            return false;
         });
     }
 });

@@ -1,6 +1,5 @@
 <div id="content">
   <table>
-
     [% IF components.size() %]
       [% FOR item IN components %]
         <tr class="entry" eid="[% item.eid %]">
@@ -19,16 +18,14 @@
           <td class="delete"> × </td>
         </tr>
       [% END %]
-      <!--
       [% IF components.size() == 20 && q %]
-        <tr class="entry" eid="[% item.eid %]">
+        <tr class="entry">
           <td></td>
           <td colspan="4">
-            <a href="" class="more">More...</a>
+            <a href="" class="more" onclick="return false;">More...</a>
           </td>
         </tr>
       [% END %]
-      -->
     [% ELSE %]
       <tr>
         <td>検索結果はありませんでした。</td>
