@@ -46,9 +46,9 @@ my $app = sub {
         );
     } elsif ($req->path eq '/delete') {
         $result = $my_bookmark->delete($req->param('eid'));
-        my $res = $req->new_response($result ? 200 : 404);
-        $res->finalize;
-        return 1;
+        return (defined $result)
+            ? [ 200, ["text/html; charset=utf-8"], ["success"]]
+            : [ 404, [], []];
     }
     my $res = $req->new_response($result ? 200 : 404);
     $res->content_type('text/html; charset=utf-8');
