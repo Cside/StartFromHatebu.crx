@@ -20,12 +20,10 @@ How to Use
 ただし5000番以外のポートを使う際はオプションページからURLの変更を行ってください。
 オプションページは chrome://extensions/ にアクセスして探すと見つかります。
 
-TODO
-----
- * 検索結果が20件以上のときのMoreモードの実装
- * いい感じのファビコン
- * キャッシュの長さの指定をオプションページからできるように
-
 Author
 ------
 id:Cside (@Cside_)
+
+Screenshot
+----------
+[![http://f.hatena.ne.jp/Cside/20110214203827](http://cdn.f.st-hatena.com/images/fotolife/C/Cside/20110214/20110214203827.png)](http://f.hatena.ne.jp/Cside/20110214203827)
