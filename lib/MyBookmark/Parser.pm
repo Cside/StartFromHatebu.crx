@@ -28,27 +28,23 @@ sub parse_xml {
     my $doc = XML::LibXML->new->parse_string(decode_utf8 $content);
     my $result = [];
     for my $entry ($doc->getElementsByTagName('entry')) {
-        my $title     = ($entry->getElementsByTagName('title') )[0]->textContent;
-        my $timestamp = ($entry->getElementsByTagName('issued'))[0]->textContent;
+        my $title = ($entry->getElementsByTagName('title') )[0]->textContent;
+        my $date  = substr(($entry->getElementsByTagName('issued'))[0]->textContent, 0, 10);
         my $link;
         my $eid;
-        for my $l ($entry->getElementsByTagName('link')  ) {
+        for my $l ($entry->getElementsByTagName('link')) {
             my $rel = $l->getAttribute('rel');
-            if ($rel eq 'related') {
-                $link = $l->getAttribute('href');
-            } elsif ($rel eq 'service.edit') {
-                $eid = substr $l->getAttribute('href'), 32;
-            }
+            $link = $l->getAttribute('href')             if $rel eq 'related';
+            $eid  = substr($l->getAttribute('href'), 32) if $rel eq 'service.edit';
         }
         push @$result, {
             title => $title,
             link  => $link,
             eid   => $eid,
-            date  => substr($timestamp, 0, 10),
+            date  => $date,
         };
     }
     @$result ? $result : 'empty';
 }
-
 
 1;

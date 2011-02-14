@@ -41,9 +41,11 @@ sub get_or_set {
 
 sub get {
     my ($self, $key, $expire) = @_;
+    $expire ||= $default_expire;
+
     my $cache_file = $self->cache_file($key);
-    $expire = $default_expire unless $expire;
-    return undef if ! defined $cache_file->stat;
+    return undef unless defined $cache_file->stat;
+
     if (time - $cache_file->stat->ctime >= $expire) {
         $cache_file->remove;
         return undef;
@@ -54,9 +56,8 @@ sub get {
 sub set {
     my ($self, $key, $data) = @_;
     my $cache_file = $self->cache_file($key);
-    if (! defined $cache_file->stat) {
-        $cache_file->touch;
-    }
+    $cache_file->touch unless defined $cache_file->stat;
+
     my $writer = $cache_file->openw;
     $writer->binmode;
     $writer->print(Data::MessagePack->pack($data));

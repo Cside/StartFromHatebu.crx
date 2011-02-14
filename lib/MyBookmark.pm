@@ -6,12 +6,11 @@ use Encode;
 use MyBookmark::Request::WSSE;
 use MyBookmark::Parser;
 use MyBookmark::Cache;
+use URI;
 use Class::Accessor::Lite (
     ro => [ qw(username password) ],
     rw => [ qw(ua_wsse cache) ],
 );
-
-use URI;
 
 sub new {
     my ($class, %args) = @_;
@@ -21,14 +20,16 @@ sub new {
     $ua->credentials( $self->username, $self->password );
     $self->ua_wsse($ua);
 
+    my $cache = MyBookmark::Cache->new(cache_dir => "$ENV{HOME}/.mycache");
+    $self->cache($cache);
+
     $self;
 }
 
 sub list {
     my ($self) = @_;
 
-    my $cache = MyBookmark::Cache->new(cache_dir => "$ENV{HOME}/.mycache");
-    $cache->get_or_set('mylist', sub {
+    $self->cache->get_or_set('mylist', sub {
         my $res = $self->ua_wsse->request(GET => 'http://b.hatena.ne.jp/atom/feed');
         MyBookmark::Parser::parse_xml(decode_utf8 $res->content)
     }, 60 * 60 * 1);
@@ -40,10 +41,13 @@ sub search {
     my $sort  = $args{sort}  || 'date' ;
     my $limit = $args{limit} || '20';
     my $uri = URI->new('http://b.hatena.ne.jp/' . $self->username . '/search/json');
-    $uri->query_form( q => $q, sort => $sort, limit => $limit,);
+    $uri->query_form(
+        q     => $q,
+        sort  => $sort,
+        limit => $limit,
+    );
 
-    my $cache = MyBookmark::Cache->new(cache_dir => "$ENV{HOME}/.mycache");
-    $cache->get_or_set(join('/', $q, $sort, $limit), sub {
+    $self->cache->get_or_set(join('/', $q, $sort, $limit), sub {
         my $res = $self->ua_wsse->request( GET => $uri->as_string );
         MyBookmark::Parser::parse_json(decode_utf8 $res->content)
     }, 60 * 60 * 1);
