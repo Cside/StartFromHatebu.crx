@@ -7,10 +7,11 @@ chrome.extension.onRequest.addListener(function(query, sender, sendResponse) {
     xhr.open('GET', query, true);
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4) {
+            c(xhr.status);
             if (xhr.status == 200) {
                 sendResponse(xhr.responseText);
             }else{
-                sendResponse(undefined);
+                sendResponse(null);
                 return;
             }
         }
