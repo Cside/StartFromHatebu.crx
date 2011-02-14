@@ -1,6 +1,10 @@
 StartFromHatebu.crx
 ===================
 
+Screenshot
+----------
+[![http://f.hatena.ne.jp/Cside/20110214203827](http://cdn.f.st-hatena.com/images/fotolife/C/Cside/20110214/20110214203827.png)](http://f.hatena.ne.jp/Cside/20110214203827)
+
 Descriptin
 ----------
 Chromeのスタートページをはてなブックマークのマイブックマーク一覧にする。検索も可能。
@@ -24,6 +28,3 @@ Author
 ------
 id:Cside (@Cside_)
 
-Screenshot
-----------
-[![http://f.hatena.ne.jp/Cside/20110214203827](http://cdn.f.st-hatena.com/images/fotolife/C/Cside/20110214/20110214203827.png)](http://f.hatena.ne.jp/Cside/20110214203827)
