@@ -7,10 +7,12 @@
 
 <script>
 $(function() {
-    var base      = localStorage["psgi_url"] || 'http://localhost:5000/';
-    var wrapper   = $('#wrapper');
-    var form      = $('#search-form');
-    var lastQ     = '';
+    var base         = localStorage["psgi_url"] || 'http://localhost:5000/';
+    var wrapper      = $('#wrapper');
+    var form         = $('#search-form');
+    var lastQ        = '';
+    var errorMessage = '通信エラー：Internal Server Error';
+    var errorBlock   = '<div align="center">' + errorMessage + '</div>';
 
     setLoadingImg();
 
@@ -18,7 +20,7 @@ $(function() {
         wrapper.html(res);
         onLoad();
     }, function(res) {
-        wrapper.html(res);
+        wrapper.html(errorBlock);
     });
 
     form.keyup(function() {
@@ -37,7 +39,7 @@ $(function() {
     });
 
     function search(limit) {
-        var q = $('#search-form').val();
+        var q = getQ();
         if (q) {
             setLoadingImg();
             lastQ       = q;
@@ -48,19 +50,18 @@ $(function() {
                 wrapper.html(res);
                 onLoad();
             }, function(res) {
-                wrapper.html(res);
-                c(res);
+                wrapper.html(errorBlock);
             });
         }
     }
     function getQ() {
-        return form.val();
+        return $.trim(form.val());
     }
     function getSort() {
         return $('.selected').text();
     }
     function setLoadingImg() {
-        wrapper.html('<img src="../static/image/loading.gif" alt="loading"/>');
+        wrapper.html('<div align="center"><img src="../static/image/loading.gif" alt="loading"/></div>');
     }
     function removeLoadingImg() {
         wrapper.html('');
@@ -85,7 +86,7 @@ $(function() {
                     entry.hide('fast');
                 }, function(req) {
                     c(req);
-                    alert('Request failed.');
+                    alert(errorMessage);
                 });
             }
 

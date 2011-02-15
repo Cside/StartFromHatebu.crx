@@ -20,7 +20,7 @@ sub parse_json {
             date  => sprintf("%4d-%02d-%02d", $year + 1900, $mon + 1, $mday),
         };
     }
-    @$result ? $result : 'empty';
+    $result;
 }
 
 sub parse_xml {
@@ -44,7 +44,7 @@ sub parse_xml {
             date  => $date,
         };
     }
-    @$result ? $result : 'empty';
+    $result;
 }
 
 1;

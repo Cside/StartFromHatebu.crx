@@ -73,17 +73,17 @@ my $app = sub {
     }
     elsif ($req->path eq '/delete') {
         $result = $my_bookmark->delete($req->param('eid'));
-        return (defined $result)
-            ? [ 200, ["text/html; charset=utf-8"], ["success"] ]
-            : [ 404, [], [] ];
+        return [ 200, [], [] ] if $result; # ヘッダ・text/plain
     }
 
-    my $res = $req->new_response($result ? 200 : 404);
+    return [ 404, [], [] ] if ! $result;
+
+    my $res = $req->new_response(200);
     $res->content_type('text/html; charset=utf-8');
     $res->body(encode_utf8(
         $tx->render('index.html', {
-            components => $result ne 'empty' ? $result : [],
-            q          => $q
+            components => $result, # [] のまま渡して大丈夫か
+            q          => $q,
         })
     ));
     $res->finalize;

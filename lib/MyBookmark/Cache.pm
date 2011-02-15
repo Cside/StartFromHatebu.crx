@@ -35,7 +35,7 @@ sub get_or_set {
         return $data;
     }
     my $result = $cb->();
-    $self->set($key, $result);
+    $self->set($key, $result) if $result;
     $result;
 }
 

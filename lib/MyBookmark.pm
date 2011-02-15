@@ -31,7 +31,9 @@ sub list {
 
     $self->cache->get_or_set('mylist', sub {
         my $res = $self->ua_wsse->request(GET => 'http://b.hatena.ne.jp/atom/feed');
-        MyBookmark::Parser::parse_xml(decode_utf8 $res->content)
+        $res
+            ? MyBookmark::Parser::parse_xml(decode_utf8 $res->content)
+            : undef
     }, 60 * 60 * 1);
 }
 
@@ -49,7 +51,9 @@ sub search {
 
     $self->cache->get_or_set(join('/', $q, $sort, $limit), sub {
         my $res = $self->ua_wsse->request( GET => $uri->as_string );
-        MyBookmark::Parser::parse_json(decode_utf8 $res->content)
+        $res
+            ? MyBookmark::Parser::parse_json(decode_utf8 $res->content)
+            : undef
     }, 60 * 60 * 1);
 }
 
