@@ -1,4 +1,4 @@
-#!/Users/cside/perl5/perlbrew/bin/perl
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
